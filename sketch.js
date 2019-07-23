@@ -62,7 +62,7 @@ function drawGrid() {
   text('Legs',w/4 -w/8,3*h/20);
   if(LEgs > 0){
     for (var i = 0; i < LEgs; i++) {
-      text(str(P1LEGS[i]), w / 8, 5 * h / 20 + i * h / 20);
+      text(str(P1LEGS[i] - 2) + ' - ' + str(P1LEGS[i]), w / 8, 5 * h / 20 + i * h / 20);
     }
   }
   
