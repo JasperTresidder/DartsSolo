@@ -160,7 +160,7 @@ function Undo() {
 
       P1av = round(P1av * 100);
       P1av = P1av / 100;
-
+      Darts -= 3;
       
     
   }
