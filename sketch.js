@@ -75,7 +75,7 @@ function drawScore() {
   let yo = 0;
   for (var i = 0; i < throws.length; i++) {
     pos += 34;
-    if(pos + 60 > h){
+    if(pos + 90 > h){
       pos = 0;
       yo += w/8;
     }
