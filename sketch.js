@@ -1,179 +1,206 @@
-P1 = 'Jasper';
+let buttonSize = 100;
+let Buttons = [];
 
-i = 0;
-j = 0;
-P1Leg = [];
-Darts = 0;
+let finish = false;
 
-lastWin = null;
+let lastval = 0;
+let w;
+let h;
+let legavg = [];
 
-LEgs = 0;
+let digit = [];
 
-P1LEGS = [];
-P1allShots = [];
+let score = 501;
+let throws = [];
 
-
-P1Curr = 501;
-
-
-
-
-const w = 500;
-const h = 600;
+let average = 0;
+let fs = false;
 
 function setup() {
-  P1av = float(0.0);
+  h = displayWidth;
+  w = displayHeight;
   createCanvas(w, h);
-  background(153, 153, 255);
-  drawGrid();
-  updateScore();
-  textAlign(CENTER);
-  input = createInput();
-  input.position(w / 2 - 66, h / 40);
-  button = createButton('Undo');
-  button.position(9 * w / 10, h / 40);
-  button.mousePressed(Undo);
-
-
+  createButtons();
+  textSize(40);
+  button = createButton('FullScreen');
+  button.position(10, 19);
+  button.mousePressed(full);
 }
 
 function draw() {
-  fill(255, 165, 0);
-}
+  background(220);
 
-function drawGrid() {
-  background(153, 153, 255);
-  stroke(0);
-  strokeWeight(4);
-  line(0, 2 * h / 10, w, 2 * h / 10);
-  
-  line(w/4, 0, w/4, h);
+  showButtons();
+  digitUpdate();
+  drawScore();
 
-  textSize(w / 20);
-  textAlign(CENTER);
-  fill(0);
-  noStroke();
-
-  // NAMES:
-  text(P1, w/2, 3 * h / 20);
-
-  textSize(w / 20);
-  text('501',w/2,5*h/20);
-  text('Legs',w/4 -w/8,3*h/20);
-  if(LEgs > 0){
-    for (var i = 0; i < LEgs; i++) {
-      text(str(P1LEGS[i]), w / 8, 5 * h / 20 + i * h / 20);
-    }
-  }
-  
-
-}
-
-function updateScore() {
-  textSize(w / 20);
-  textAlign(CENTER);
-  fill(10, 0, 145);
-
-  text(str(P1av), w / 2 + 100, 3 * h / 20);
-  
-  fill(0);
-}
-
-
-function Score() {
-  drawGrid();
-  strokeWeight(4);
-  fill(0);
-  var value = input.value();
-  P1allShots.push(int(value));
-  P1Curr = P1Curr - int(value);
-  P1Leg.push(P1Curr);
-  input.value('');
-  textSize(w / 20);
-  textAlign(CENTER);
-  fill(0);
-  
-  
-  if(P1Curr == 0){
-    Darts += 3;
-    P1LEGS.push(Darts);
-    Darts = 0;
-  }else{
-    Darts += 3;
-  }
-  
-  drawScore()
-  if (P1Curr == 0) {
-    LEgs += 1;
-    redo();
-  }
-  
-
-  var temp = 0;
-  for (var k = 0; k < P1allShots.length; k++) {
-    temp = temp + int(P1allShots[k]);
-  }
-  P1av = float(temp / P1allShots.length);
-
-  P1av = round(P1av * 100);
-  P1av = P1av / 100;
-  
-  updateScore();
-}
-
-function redo() {
-  i = 0;
-  j = 0;
-
-  P1Leg = [];
-
-  P1Curr = 501;
-  drawGrid();
-}
-
-function keyTyped() {
-  if (key === ' ' & int(input.value()) < 181 & int(input.value()) > -1 & isNaN(input.value()) == false) {
-    if (int(input.value()) < P1Curr + 1) {
-      Score();
-    }
-  }
-}
-
-function Undo() {
-    if (P1Leg.length != 0) {
-      if (P1Leg.length == 1) {
-        P1Curr = 501;
-      } else {
-        P1Curr = P1Leg[P1Leg.length - 2];
+  if (finish == true) {
+    if (digit.length > 0) {
+      if (int(digit[0]) < 4) {
+        updateAverage(digit[0]);
       }
-      P1allShots.pop();
-      P1Leg.pop();
-      drawGrid();
-      fill(0);
-      drawScore();
 
-      var temp = 0;
-      for (var k = 0; k < P1allShots.length; k++) {
-        temp = temp + int(P1allShots[k]);
-      }
-      P1av = float(temp / P1allShots.length);
+    }
+    digit = [];
+  }
 
-      P1av = round(P1av * 100);
-      P1av = P1av / 100;
+}
 
-      
-    
+function scoreUpdate() {
+  let num = join(digit, '');
+  if (int(num) < 181 && score - int(num) > 0 && score - int(num) != 1) {
+    throws.push(int(num))
+    score = score - int(num)
+    updateAverage();
+    print(score);
+    digit = [];
+  } else if (score - int(num) == 0) {
+    finish = true;
+    lastval = int(num);
+    //throws.push(int(num))
+    digit = [];
   }
 
 }
 
 function drawScore() {
-  for (var i = 0; i < P1Leg.length; i++) {
-    if (i < 14) {
-      text(str(P1Leg[i]), w / 2, 6 * h / 20 + i * h / 20);
-    } else {
-      text(str(P1Leg[i]), w / 2 + w / 8, 6 * h / 20 + (i - 15) * h / 20);
+  push();
+  translate(3 * w / 4, h / 8);
+  textSize(60);
+  text('501', 0, 0);
+  let pos = 0;
+  let temp = 501;
+  for (var i = 0; i < throws.length; i++) {
+    pos += 70;
+    text(str(temp - throws[i]), 0, pos);
+    temp = temp - throws[i];
+    //print('ok');
+  }
+  fill(255, 0, 0);
+  translate(-w / 4, 0);
+  text(str(average), 0, 0);
+  for (var i = 0; i < legavg.length; i++) {
+    textSize(30);
+    fill(0, 0, 255);
+    text(str(legavg[i][0]), 0, 30 + 28 * i);
+  }
+  pop();
+}
+
+function createButtons() {
+  let xOff = w / 2 - 3 * buttonSize / 2 - w / 4;
+  let yOff = h / 2 - 2 * buttonSize;
+  for (var j = 0; j < 4; j++) {
+    for (var i = 0; i < 3; i++) {
+      let index = i + j * 3;
+      let num;
+      if (index < 9) {
+        num = str(index + 1);
+      }
+      if (index == 9) {
+        num = 'C';
+      }
+      if (index == 10) {
+        num = '0';
+      }
+      if (index == 11) {
+        num = 'E';
+      }
+      Buttons.push([i * buttonSize + xOff, j * buttonSize + yOff, buttonSize, buttonSize, num]);
     }
   }
+}
 
+function showButtons() {
+  let xOff = buttonSize / 2 - 10;
+  let yOff = buttonSize / 2 + 10;
+  for (var i = 0; i < Buttons.length; i++) {
+    let b = Buttons[i];
+    if (i == 0) {
+      fill(255);
+      rect(b[0] + b[2] / 2, b[1] - b[3], b[2] * 2, 3 * b[3] / 4);
+    }
+    fill(200, 255, 255);
+    rect(b[0], b[1], b[2], b[3]);
+    fill(0);
+    text(b[4], b[0] + xOff, b[1] + yOff);
+  }
+}
+
+function touchStarted() {
+  let x = mouseX;
+  let y = mouseY;
+  push();
+  for (var i = 0; i < Buttons.length; i++) {
+    let b = Buttons[i];
+    if (x < b[0] + b[2] && x > b[0] && y < b[1] + b[3] && y > b[1]) {
+      Touch(b[4]);
+    }
+  }
+  pop();
+}
+
+function Touch(n) {
+  if (n == 'C') {
+    digit = [];
+  } else if (n == 'E') {
+    scoreUpdate();
+
+  } else {
+    if (digit.length < 3) {
+      digit.push(int(n));
+    }
+  }
+}
+
+function digitUpdate() {
+  push();
+  translate(Buttons[0][0] + 3 * buttonSize / 2, Buttons[0][1] - 4 * buttonSize / 8);
+  textAlign(CENTER);
+  if (digit.length == 0) {
+    text('0', 0, 0);
+  } else {
+    let num = join(digit, '');
+    text(num, 0, 0);
+  }
+  pop();
+}
+
+function updateAverage(n) {
+  let a = 0;
+  let d = 0;
+  if (legavg.length != 0) {
+    for (var i = 0; i < legavg.length; i++) {
+      d += int(legavg[i][0]);
+      a += 501;
+    }
+  }
+  let legd = 0
+  for (var i = 0; i < throws.length; i++) {
+    d += 3;
+    legd += 3;
+    a += int(throws[i]);
+  }
+  if (finish) {
+    a += score;
+    d -= 3 - n;
+    legd -= 3 - n;
+    d += 3;
+    legd += 3;
+  }
+  average = 3 * a / d;
+  average = floor(average * 100) / 100;
+  if (finish) {
+    legavg.push([legd, 3 * 501 / legd])
+    console.log([legd, a, 3 * 501 / legd, average,d]);
+    throws = [];
+    score = 501;
+    finish = false;
+  }
+
+}
+
+function full() {
+  fs = !fs;
+  fullscreen(fs);
 }
