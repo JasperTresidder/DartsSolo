@@ -135,7 +135,7 @@ function showButtons() {
   }
 }
 
-function mousePressed() {
+function touchStarted() {
   //score = 999;
   let x = mouseX;
   let y = mouseY;
