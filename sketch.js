@@ -36,7 +36,7 @@ function draw() {
   digitUpdate();
   drawScore();
 
-  if (finish == true || score == 0) {
+  if (finish == true) {
     if (digit.length > 0) {
       if (int(digit[0]) < 4) {
         updateAverage(digit[0]);
