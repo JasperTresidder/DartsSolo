@@ -62,7 +62,7 @@ function scoreUpdate() {
   }
 
 }
-
+//
 function drawScore() {
   push();
   translate(3 * w / 4, h / 8);
