@@ -17,7 +17,7 @@ let average = 0;
 let fs = false;
 
 function setup() {
-  h = displayWidth;
+  h = displayWidth -200;
   w = displayHeight;
   createCanvas(w, h);
   createButtons();
@@ -70,9 +70,14 @@ function drawScore() {
   text('501', 0, 0);
   let pos = 0;
   let temp = 501;
+  let yo = 0;
   for (var i = 0; i < throws.length; i++) {
     pos += 70;
-    text(str(temp - throws[i]), 0, pos);
+    if(i == 11){
+      pos = 0;
+      yo += w/8;
+    }
+    text(str(temp - throws[i]), yo, pos);
     temp = temp - throws[i];
     //print('ok');
   }
@@ -127,7 +132,8 @@ function showButtons() {
   }
 }
 
-function touchStarted() {
+function mousePressed() {
+  score = 999;
   let x = mouseX;
   let y = mouseY;
   push();
