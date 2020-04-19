@@ -19,6 +19,8 @@ let fs = false;
 function setup() {
   h = displayWidth -200;
   w = displayHeight;
+  h = 600;
+  w = 700;
   createCanvas(w, h);
   createButtons();
   textSize(40);
@@ -34,7 +36,7 @@ function draw() {
   digitUpdate();
   drawScore();
 
-  if (finish == true) {
+  if (finish == true || score == 0) {
     if (digit.length > 0) {
       if (int(digit[0]) < 4) {
         updateAverage(digit[0]);
@@ -48,32 +50,32 @@ function draw() {
 
 function scoreUpdate() {
   let num = join(digit, '');
-  if (int(num) < 181 && score - int(num) > 0 && score - int(num) != 1) {
-    throws.push(int(num))
-    score = score - int(num)
-    updateAverage();
-    print(score);
-    digit = [];
-  } else if (score - int(num) == 0) {
+  if (score - int(num) == 0) {
+    print('ok')
     finish = true;
     lastval = int(num);
     //throws.push(int(num))
     digit = [];
+  }else if (int(num) < 181 && score - int(num) > 0 && score - int(num) != 1) {
+    throws.push(int(num))
+    score = score - int(num)
+    updateAverage();
+    digit = [];
   }
 
 }
-//
+
 function drawScore() {
   push();
   translate(3 * w / 4, h / 8);
-  textSize(40);
+  textSize(35);
   text('501', 0, 0);
   let pos = 0;
   let temp = 501;
   let yo = 0;
   for (var i = 0; i < throws.length; i++) {
-    pos += 50;
-    if(i == 11){
+    pos += 34;
+    if(pos + 60 > h){
       pos = 0;
       yo += w/8;
     }
@@ -88,6 +90,7 @@ function drawScore() {
     textSize(30);
     fill(0, 0, 255);
     text(str(legavg[i][0]), 0, 30 + 28 * i);
+    
   }
   pop();
 }
@@ -133,7 +136,7 @@ function showButtons() {
 }
 
 function mousePressed() {
-  score = 999;
+  //score = 999;
   let x = mouseX;
   let y = mouseY;
   push();
@@ -198,7 +201,7 @@ function updateAverage(n) {
   average = floor(average * 100) / 100;
   if (finish) {
     legavg.push([legd, 3 * 501 / legd])
-    console.log([legd, a, 3 * 501 / legd, average,d]);
+    //console.log([legd, a, 3 * 501 / legd, average,d]);
     throws = [];
     score = 501;
     finish = false;
