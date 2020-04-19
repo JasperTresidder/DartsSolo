@@ -17,10 +17,8 @@ let average = 0;
 let fs = false;
 
 function setup() {
-  h = displayWidth -200;
+  h = displayWidth -100;
   w = displayHeight;
-  h = 600;
-  w = 700;
   createCanvas(w, h);
   createButtons();
   textSize(40);
