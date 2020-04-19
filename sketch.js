@@ -66,13 +66,13 @@ function scoreUpdate() {
 function drawScore() {
   push();
   translate(3 * w / 4, h / 8);
-  textSize(60);
+  textSize(40);
   text('501', 0, 0);
   let pos = 0;
   let temp = 501;
   let yo = 0;
   for (var i = 0; i < throws.length; i++) {
-    pos += 70;
+    pos += 50;
     if(i == 11){
       pos = 0;
       yo += w/8;
